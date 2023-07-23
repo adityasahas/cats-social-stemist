@@ -5,6 +5,8 @@ import { api } from "@/utils/api";
 import { ChakraProvider } from "@chakra-ui/react";
 import "@/styles/globals.css";
 
+import Layout from '../components/layout';
+
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
@@ -12,7 +14,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <ChakraProvider>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </ChakraProvider>
     </SessionProvider>
   );
