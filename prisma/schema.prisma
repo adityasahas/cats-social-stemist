@@ -22,7 +22,7 @@ datasource db {
 
 // Necessary for Next auth
 model Account {
-    id                String  @id @default(cuid())
+    id                String  @id @map("_id") @default(cuid())
     userId            String
     type              String
     provider          String
@@ -40,7 +40,7 @@ model Account {
 }
 
 model Session {
-    id           String   @id @default(cuid())
+    id           String   @id @map("_id") @default(cuid())
     sessionToken String   @unique
     userId       String
     expires      DateTime
@@ -48,7 +48,7 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String    @id @map("_id") @default(cuid())
     name          String?
     email         String?   @unique
     emailVerified DateTime?
@@ -58,6 +58,7 @@ model User {
 }
 
 model VerificationToken {
+    id String @id @map("_id") @default(cuid())
     identifier String
     token      String   @unique
     expires    DateTime
@@ -66,7 +67,7 @@ model VerificationToken {
 }
 
 model Feed {
-    id String @id @default(ucid())
+    id String @id @map("_id") @default(cuid())
     catname String
     breed String
     text String
@@ -74,4 +75,5 @@ model Feed {
     userId String
     title String
     numLikes Int
+    createdAt DateTime @default(now())
 }
