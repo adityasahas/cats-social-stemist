@@ -75,4 +75,5 @@ model Feed {
     userId String
     title String
     numLikes Int
+    createdAt DateTime @default(now())
 }
