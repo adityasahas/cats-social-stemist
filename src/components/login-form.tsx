@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   Box,
   FormControl,
@@ -6,49 +5,80 @@ import {
   Input,
   Button,
   Heading,
+  VStack,
+  useColorModeValue,
+  Flex
 } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import Lottie from 'lottie-react';
+import { signIn, getCsrfToken, getProviders } from 'next-auth/react';
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 
-interface LoginFormProps {
-  onSubmit: (username: string, password: string) => void;
+interface MergedLoginFormProps {
+  csrfToken: string,
+  providers: any
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
+const LoginForm: React.FC<MergedLoginFormProps> = ({ csrfToken, providers }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [animationData, setAnimationData] = useState(null);
+  const formBackground = useColorModeValue("orange.100", "orange.700");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmit(username, password);
+    signIn('credentials', { callbackUrl: '/', username, password });
   };
 
+  useEffect(() => {
+    fetch('/signincat.json')
+      .then(response => response.json())
+      .then(data => setAnimationData(data));
+  }, []);
+
   return (
-    <Box width="md" mx="auto" mt={8} p={8} borderWidth={1} borderRadius="md">
-      <Heading as="h2" size="lg" textAlign="center" mb={6}>
-        Welcome
-      </Heading>
-      <form onSubmit={handleSubmit}>
-        <FormControl id="username">
-          <FormLabel>Username</FormLabel>
-          <Input
-            type="text"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </FormControl>
-        <FormControl id="password" mt={4}>
-          <FormLabel>Password</FormLabel>
-          <Input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </FormControl>
-        <Button type="submit" colorScheme="teal" mt={6}>
-          Login
-        </Button>
-      </form>
-    </Box>
+    <Flex minHeight="100vh" width="full" align="center" justifyContent="center" bgColor={formBackground}>
+      <Box p={8} maxWidth="500px" borderWidth={1} borderRadius={8} boxShadow="lg">
+        <Box textAlign="center">
+          {animationData && (
+            <Lottie 
+              animationData={animationData} 
+              loop={true}
+              style={{height: '300px', width: '300px'}} 
+            />
+          )}
+        </Box>
+        <Box my={4} textAlign="left">
+          <form method="post" action="/api/auth/callback/credentials" onSubmit={handleSubmit}>
+            <Input name="csrfToken" type="hidden" defaultValue={csrfToken} />
+            <VStack spacing="5">
+              <Box>
+                <label>Username</label>
+                <Input name="username" type="text" placeholder="Mr. Cat" value={username} onChange={(event) => setUsername(event.target.value)} />
+              </Box>
+              <Box>
+                <label>Password</label>
+                <Input name="password" type="password" placeholder="****" value={password} onChange={(event) => setPassword(event.target.value)} />
+              </Box>
+              <Button colorScheme={"orange"} type="submit">Sign in</Button>
+            </VStack>
+          </form>
+        </Box>
+      </Box>
+    </Flex>
   );
 };
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const csrfToken = await getCsrfToken(context);
+  const providers = await getProviders();
+
+  return {
+    props: { 
+      csrfToken: csrfToken,
+      providers: providers ?? [],
+    },
+  }
+}
 
 export default LoginForm;
