@@ -8,10 +8,10 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => (
-  <Box>
+  <>
     <Navbar />
     <main>{children}</main>
-  </Box>
+  </>
 );
 
 export default Layout;

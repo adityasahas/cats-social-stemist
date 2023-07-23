@@ -23,36 +23,16 @@ import { useRouter } from "next/router";
 
 const Navbar = () => {
   const { isOpen, onToggle } = useDisclosure();
-  const focusBgColor = useColorModeValue("gray.300", "gray.700");
 
-  const navBgColor = useColorModeValue("#ffffff9c", "#efefef19");
-
-  const ColorModeToggle = () => {
-    const { colorMode, toggleColorMode } = useColorMode();
-
-    return (
-      <IconButton
-        aria-label="Toggle color mode"
-        variant="ghost"
-        icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-        onClick={toggleColorMode}
-        size={"sm"}
-      />
-    );
-  };
 
   const router = useRouter();
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "About", href: "#about" },
-    { name: "Schedule", href: "#schedule" },
-    { name: "Prizes", href: "#prizes" },
-    { name: "FAQ", href: "#faq" },
-    { name: "Sponsors", href: "#sponsors" },
+    { name: "Feed", href: "/feed" },
+    { name: "Login", href: "/login" },
   ];
 
-  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <Flex
@@ -71,14 +51,14 @@ const Navbar = () => {
         py={"10px"}
         backdropFilter="blur(8px)"
         backgroundClip="padding-box"
-        bgColor={navBgColor}
+        bgColor={"#ffffff21"}
         borderRadius={"lg"}
         boxShadow={"lg"}
       >
         <Flex alignItems={"center"}>
           <Image
-            src="/TechOptimumLogo.png"
-            alt="Tech Optimum Logo"
+            src="/logo.png"
+            alt="Logo"
             boxSize="50px"
             borderRadius={"full"}
             width={"32px"}
@@ -86,7 +66,7 @@ const Navbar = () => {
             mr={"10px"}
           />
           <Text fontSize="lg" fontWeight="bold">
-            Hacks SZN 2
+            Cat Social
           </Text>
         </Flex>
         <IconButton
@@ -124,11 +104,11 @@ const Navbar = () => {
                   <Button
                     key={link.name}
                     variant="unstyled"
-                    color={colorMode === "light" ? "#2b6db1" : "#3399ff"}
+                    color={"#111111"}
                     _hover={{
-                      color: colorMode === "light" ? "#004182" : "#96c5f3",
+                      bg: "#1c1c1c21",
                     }}
-                    _focus={{ bg: focusBgColor }}
+                    // _focus={{ bg: focusBgColor }}
                     isActive={router.pathname === link?.href}
                     onClick={() => {
                       router.push(link?.href);
@@ -143,8 +123,6 @@ const Navbar = () => {
                 ))}
               </Flex>
             </DrawerBody>
-
-            
           </DrawerContent>
         </DrawerOverlay>
       </Drawer>
@@ -157,40 +135,43 @@ const Navbar = () => {
         border="1px solid #ffffff17"
         borderRadius={"18px"}
         justifyContent={"space-between"}
-        w={"80%"}
+        w={"50%"}
         px={"30px"}
         backdropFilter="blur(8px)"
         backgroundClip="padding-box"
-        bgColor={navBgColor}
+        bgColor={"#ffffff21"}
         boxShadow={"0 0 10px #00000017"}
       >
         <Flex alignItems={"center"}>
           <Image
-            src="/TechOptimumLogo.png"
-            alt="Tech Optimum Logo"
+            src="/logo.png"
+            alt="CatSocial Logo"
             boxSize="50px"
             borderRadius={"full"}
             width={"32px"}
             height={"32px"}
-            mr={"10px"}
+            mr={"20px"}
           />
           <Text fontSize="lg" fontWeight="bold">
-            Hacks SZN 2
+          Cat Social
           </Text>
         </Flex>
 
-        <Flex alignItems="center" justifyContent="center" gap={"20px"}>
+        <Flex alignItems="center" justifyContent="center" gap={"10px"}>
           {navLinks.map((link) => (
             <Button
               key={link.name}
               variant="unstyled"
-              color={colorMode === "light" ? "#2b6db1" : "#3399ff"}
-              _hover={{ color: colorMode === "light" ? "#004182" : "#96c5f3" }}
-              _focus={{ bg: focusBgColor }}
+              color={"#111111"}
+              _hover={{
+                bg: "#1c1c1c21",
+              }}
+              px={"10px"}
+              // _focus={{ bg: focusBgColor }}
               isActive={router.pathname === link?.href}
               onClick={() => router.push(link?.href)}
-              fontWeight={"700"}
-              fontSize={"20px"}
+              fontWeight={"500"}
+              fontSize={"18px"}
             >
               {link.name}
             </Button>
