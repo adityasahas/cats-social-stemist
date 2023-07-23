@@ -1,69 +1,202 @@
-// components/Navbar.tsx
+import React, { useState, useEffect } from "react";
+import {
+  Flex,
+  Text,
+  Button,
+  IconButton,
+  useDisclosure,
+  HStack,
+  useColorModeValue,
+  useColorMode,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Image,
+} from "@chakra-ui/react";
+import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { useRouter } from "next/router";
 
-import { Box, Flex, HStack, IconButton, useDisclosure, Stack } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import React from "react";
-import Link from 'next/link'
+const Navbar = () => {
+  const { isOpen, onToggle } = useDisclosure();
+  const focusBgColor = useColorModeValue("gray.300", "gray.700");
 
-const Links: { pageName: string, pageLink: string }[] = [
-    { pageName: 'Home', pageLink: '/' },
-    { pageName: 'Login', pageLink: '/login' }
-];
+  const navBgColor = useColorModeValue("#ffffff9c", "#efefef19");
 
-const NavLink = ({ href, children }: { href: string, children: React.ReactNode }) => (
-    <Link href={href} passHref>
-        <Box
-            px={2}
-            py={1}
-            rounded={'md'}
-            _hover={{
-                textDecoration: 'none',
-                bg: 'gray.200',
-            }}
-        >
-            {children}
-        </Box>
-    </Link>
-);
-
-function Navbar() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+  const ColorModeToggle = () => {
+    const { colorMode, toggleColorMode } = useColorMode();
 
     return (
-        <Box px={4} py={4} bg="transparent" position="fixed" width="100%" zIndex={10}>
-            <Flex h={20} alignItems={'center'} justifyContent={'center'}>
-                <IconButton
-                    size={'md'}
-                    icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-                    aria-label={'Open Menu'}
-                    display={{ md: 'none' }}
-                    onClick={isOpen ? onClose : onOpen}
-                />
-                <HStack spacing={8} alignItems={'center'}>
-                    <Box fontSize="xl" fontWeight="bold" letterSpacing="widest">Cat Chat</Box>
-                    <HStack
-                        as={'nav'}
-                        spacing={4}
-                        display={{ base: 'none', md: 'flex' }}
-                    >
-                        {Links.map((link) => (
-                            <NavLink key={link.pageName} href={link.pageLink}>{link.pageName}</NavLink>
-                        ))}
-                    </HStack>
-                </HStack>
-            </Flex>
-
-            {isOpen ? (
-                <Box pb={4} display={{ md: 'none' }}>
-                    <Stack as={'nav'} spacing={4}>
-                        {Links.map((link) => (
-                            <NavLink key={link.pageName} href={link.pageLink}>{link.pageName}</NavLink>
-                        ))}
-                    </Stack>
-                </Box>
-            ) : null}
-        </Box>
+      <IconButton
+        aria-label="Toggle color mode"
+        variant="ghost"
+        icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+        onClick={toggleColorMode}
+        size={"sm"}
+      />
     );
+  };
+
+  const router = useRouter();
+
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "Feed", href: "#about" },
+    { name: "Register", href: "#schedule" },
+  ];
+
+  const { colorMode, toggleColorMode } = useColorMode();
+
+  return (
+    <Flex
+      w="100%"
+      justifyContent="center"
+      my={"30px"}
+      position={"fixed"}
+      zIndex={"999"}
+    >
+      {/* Mobile Drawer */}
+      <Flex
+        display={{ base: "flex", xl: "none" }} // Show on mobile, hide on xl screens
+        justifyContent="space-between"
+        w={{ base: "95%", sm: "60%"}}
+        px={"30px"}
+        py={"10px"}
+        backdropFilter="blur(8px)"
+        backgroundClip="padding-box"
+        bgColor={navBgColor}
+        borderRadius={"lg"}
+        boxShadow={"lg"}
+      >
+        <Flex alignItems={"center"}>
+          <Image
+            src="/TechOptimumLogo.png"
+            alt="Tech Optimum Logo"
+            boxSize="50px"
+            borderRadius={"full"}
+            width={"32px"}
+            height={"32px"}
+            mr={"10px"}
+          />
+          <Text fontSize="lg" fontWeight="bold">
+            Hacks SZN 2
+          </Text>
+        </Flex>
+        <IconButton
+          icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+          variant="ghost"
+          size={"sm"}
+          onClick={onToggle}
+          aria-label="Toggle Menu"
+        />
+      </Flex>
+
+      {/* Mobile Drawer Content */}
+      <Drawer placement="right" onClose={onToggle} isOpen={isOpen}>
+        <DrawerOverlay>
+          <DrawerContent
+            bgGradient={`linear(-45deg, #3d89d52c, #797de823 50%, #ed4e862c)`}
+          >
+            <DrawerCloseButton />
+
+            <DrawerHeader>
+              <Image
+                src="/TechOptimumLogo.png"
+                alt="Tech Optimum Logo"
+                boxSize="50px"
+                borderRadius={"full"}
+                width={"32px"}
+                height={"32px"}
+                mr={"10px"}
+              />
+            </DrawerHeader>
+
+            <DrawerBody>
+              <Flex direction="column">
+                {navLinks.map((link) => (
+                  <Button
+                    key={link.name}
+                    variant="unstyled"
+                    color={colorMode === "light" ? "#2b6db1" : "#3399ff"}
+                    _hover={{
+                      color: colorMode === "light" ? "#004182" : "#96c5f3",
+                    }}
+                    _focus={{ bg: focusBgColor }}
+                    isActive={router.pathname === link?.href}
+                    onClick={() => {
+                      router.push(link?.href);
+                      onToggle(); // Close the drawer on link click
+                    }}
+                    fontWeight={"700"}
+                    fontSize={"20px"}
+                    my={1}
+                  >
+                    {link.name}
+                  </Button>
+                ))}
+              </Flex>
+            </DrawerBody>
+
+            
+          </DrawerContent>
+        </DrawerOverlay>
+      </Drawer>
+
+      {/* Desktop Navbar */}
+      <Flex
+        display={{ base: "none", xl: "flex" }} // Hide on mobile, show on xl screens
+        h={16}
+        alignItems="center"
+        border="1px solid #ffffff17"
+        borderRadius={"18px"}
+        justifyContent={"space-between"}
+        w={"80%"}
+        px={"30px"}
+        backdropFilter="blur(8px)"
+        backgroundClip="padding-box"
+        bgColor={navBgColor}
+        boxShadow={"0 0 10px #00000017"}
+      >
+        <Flex alignItems={"center"}>
+          <Image
+            src="/TechOptimumLogo.png"
+            alt="Tech Optimum Logo"
+            boxSize="50px"
+            borderRadius={"full"}
+            width={"32px"}
+            height={"32px"}
+            mr={"10px"}
+          />
+          <Text fontSize="lg" fontWeight="bold">
+            Hacks SZN 2
+          </Text>
+        </Flex>
+
+        <Flex alignItems="center" justifyContent="center" gap={"20px"}>
+          {navLinks.map((link) => (
+            <Button
+              key={link.name}
+              variant="unstyled"
+              color={colorMode === "light" ? "#2b6db1" : "#3399ff"}
+              _hover={{ color: colorMode === "light" ? "#004182" : "#96c5f3" }}
+              _focus={{ bg: focusBgColor }}
+              isActive={router.pathname === link?.href}
+              onClick={() => router.push(link?.href)}
+              fontWeight={"700"}
+              fontSize={"20px"}
+            >
+              {link.name}
+            </Button>
+          ))}
+        </Flex>
+
+       
+      </Flex>
+    </Flex>
+  );
 };
 
 export default Navbar;
