@@ -20,6 +20,7 @@ import {
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 
+
 const Navbar = () => {
   const { isOpen, onToggle } = useDisclosure();
   const focusBgColor = useColorModeValue("gray.300", "gray.700");
@@ -44,8 +45,11 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Feed", href: "#about" },
-    { name: "Register", href: "#schedule" },
+    { name: "About", href: "#about" },
+    { name: "Schedule", href: "#schedule" },
+    { name: "Prizes", href: "#prizes" },
+    { name: "FAQ", href: "#faq" },
+    { name: "Sponsors", href: "#sponsors" },
   ];
 
   const { colorMode, toggleColorMode } = useColorMode();
@@ -193,7 +197,6 @@ const Navbar = () => {
           ))}
         </Flex>
 
-       
       </Flex>
     </Flex>
   );
