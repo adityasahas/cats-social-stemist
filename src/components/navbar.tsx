@@ -30,7 +30,7 @@ function Navbar() {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
-        <Box px={4} py={4} bg="transparent" position="fixed" width="100%" zIndex={10}>
+        <Box px={4} py={4} bg="transparent" width="100%" zIndex={10}>
             <Flex h={20} alignItems={'center'} justifyContent={'center'}>
                 <IconButton
                     size={'md'}
