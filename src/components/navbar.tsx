@@ -16,22 +16,27 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Image,
+  Avatar
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
-
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
   const { isOpen, onToggle } = useDisclosure();
 
-
   const router = useRouter();
 
-  const navLinks = [
+  const { data: session } = useSession();
+  let navLinks = [
     { name: "Home", href: "/" },
     { name: "Feed", href: "/feed" },
-    { name: "Login", href: "/login" },
+    { name: "Create", href: "/create" },
   ];
+  if (!session) {
+    navLinks.pop();
+    navLinks.push({ name: "Login", href: "/login" });
+  }
 
 
   return (
@@ -46,7 +51,7 @@ const Navbar = () => {
       <Flex
         display={{ base: "flex", xl: "none" }} // Show on mobile, hide on xl screens
         justifyContent="space-between"
-        w={{ base: "95%", sm: "60%"}}
+        w={{ base: "95%", sm: "60%" }}
         px={"30px"}
         py={"10px"}
         backdropFilter="blur(8px)"
@@ -61,8 +66,8 @@ const Navbar = () => {
             alt="Logo"
             boxSize="50px"
             borderRadius={"full"}
-            width={"32px"}
-            height={"32px"}
+            width={"42px"}
+            height={"42px"}
             mr={"10px"}
           />
           <Text fontSize="lg" fontWeight="bold">
@@ -88,8 +93,8 @@ const Navbar = () => {
 
             <DrawerHeader>
               <Image
-                src="/TechOptimumLogo.png"
-                alt="Tech Optimum Logo"
+                src="/logo.png"
+                alt="catsocial"
                 boxSize="50px"
                 borderRadius={"full"}
                 width={"32px"}
@@ -141,6 +146,7 @@ const Navbar = () => {
         backgroundClip="padding-box"
         bgColor={"#ffffff21"}
         boxShadow={"0 0 10px #00000017"}
+       
       >
         <Flex alignItems={"center"}>
           <Image
@@ -148,12 +154,14 @@ const Navbar = () => {
             alt="CatSocial Logo"
             boxSize="50px"
             borderRadius={"full"}
-            width={"32px"}
-            height={"32px"}
-            mr={"20px"}
+            width={"42px"}
+            height={"42px"}
+            mr={"10px"}
+            transition={"all 0.2s ease-in-out"}
+            _hover={{transform: " rotate(20deg) scale(1.1)"}}
           />
           <Text fontSize="lg" fontWeight="bold">
-          Cat Social
+            Cat Social
           </Text>
         </Flex>
 
@@ -176,8 +184,9 @@ const Navbar = () => {
               {link.name}
             </Button>
           ))}
+          {/* @ts-ignore */}
+          {session && <Avatar size={"sm"} src={session.user.image} />}
         </Flex>
-
       </Flex>
     </Flex>
   );

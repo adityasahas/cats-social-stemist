@@ -43,14 +43,14 @@ const FeedCard = ({
   };
 
   return (
-    <Center pt={"140px"} >
+    <Center pt={"30px"} >
       <SimpleGrid columns={{ base: 1, md: 1 }}>
         <Box
           maxW="sm"
-          borderWidth="1px"
           borderRadius="lg"
           overflow="hidden"
           bg={cardBackground}
+         boxShadow={"25px"}
         >
           <Image src={image} alt={breed} />
 
