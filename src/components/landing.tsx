@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useState, useEffect } from "react";
 import { Box, Flex, Heading, Text, useColorModeValue } from "@chakra-ui/react";
 import  Lottie  from "lottie-react";

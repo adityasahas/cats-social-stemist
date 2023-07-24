@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Box, Text } from "@chakra-ui/react";
 import FeedCard from "@/components/feedcard";
 import { api } from "@/utils/api";

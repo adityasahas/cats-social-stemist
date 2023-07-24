@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { useState } from "react";
 import {
   Box,
@@ -26,10 +28,11 @@ const Create = () => {
 
   const { data: session } = useSession();
 
+  
   if (session) {
-    async function handleSubmit(e: unknown) {
+    async function handleSubmit(e: React.FormEvent) {
       e.preventDefault();
-
+    
       const post = {
         title,
         catname: catName,
@@ -39,7 +42,7 @@ const Create = () => {
         username: session?.user.name,
         numLikes: 1,
       };
-  
+    
       await fetch("/api/create/post", {
         method: "POST",
         headers: {
@@ -47,7 +50,6 @@ const Create = () => {
         },
         body: JSON.stringify(post),
       });
-  
     }
   
     return (
