@@ -122,7 +122,7 @@ const LoginForm: React.FC<MergedLoginFormProps> = ({
         <Box my={4} textAlign="left">
           <form
             method="post"
-            action="/api/auth/callback/credentials"
+            action="https://cats-social-stemist.vercel.app/api/auth/callback/credentials"
             onSubmit={handleSubmit}
           >
             <Input name="csrfToken" type="hidden" defaultValue={csrfToken} />
