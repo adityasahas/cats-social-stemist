@@ -48,7 +48,7 @@ const LoginForm: React.FC<MergedLoginFormProps> = ({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    signIn("credentials", { callbackUrl: "/", username, password });
+    signIn("credentials", { callbackUrl: "https://cats-social-stemist.vercel.app/", username, password });
   };
 
   useEffect(() => {
